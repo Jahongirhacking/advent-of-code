@@ -34,23 +34,14 @@ class Box extends Movable {
     if (dx === 0) {
       return super.getIsMovable(dx, dy);
     } else {
-      if (this.char === "[") {
-        return (
-          this.isMovable &&
-          grid[this.x + dx][this.y + dy].char !== "#" &&
-          grid[this.x + dx][this.y + 1 + dy].char !== "#" &&
-          grid[this.x + dx][this.y + dy].getIsMovable(dx, dy) &&
-          grid[this.x + dx][this.y + 1 + dy].getIsMovable(dx, dy)
-        );
-      } else {
-        return (
-          this.isMovable &&
-          grid[this.x + dx][this.y + dy].char !== "#" &&
-          grid[this.x + dx][this.y - 1 + dy].char !== "#" &&
-          grid[this.x + dx][this.y + dy].getIsMovable(dx, dy) &&
-          grid[this.x + dx][this.y - 1 + dy].getIsMovable(dx, dy)
-        );
-      }
+      const sign = this.char === "[" ? 1 : -1;
+      return (
+        this.isMovable &&
+        grid[this.x + dx][this.y + dy].char !== "#" &&
+        grid[this.x + dx][this.y + sign + dy].char !== "#" &&
+        grid[this.x + dx][this.y + dy].getIsMovable(dx, dy) &&
+        grid[this.x + dx][this.y + sign + dy].getIsMovable(dx, dy)
+      );
     }
   }
   move(dx: number, dy: number): void {
@@ -59,15 +50,10 @@ class Box extends Movable {
     } else {
       if (this.getIsMovable(dx, dy)) {
         grid[this.x + dx][this.y + dy].move(dx, dy);
-        if (this.char === "[") {
-          grid[this.x + dx][this.y + 1 + dy].move(dx, dy);
-          swap(this.x, this.y + 1, this.x + dx, this.y + 1 + dy);
-          swap(this.x, this.y, this.x + dx, this.y + dy);
-        } else {
-          grid[this.x + dx][this.y - 1 + dy].move(dx, dy);
-          swap(this.x, this.y - 1, this.x + dx, this.y - 1 + dy);
-          swap(this.x, this.y, this.x + dx, this.y + dy);
-        }
+        const sign = this.char === "[" ? 1 : -1;
+        grid[this.x + dx][this.y + sign + dy].move(dx, dy);
+        swap(this.x, this.y + sign, this.x + dx, this.y + sign + dy);
+        swap(this.x, this.y, this.x + dx, this.y + dy);
       }
     }
   }
