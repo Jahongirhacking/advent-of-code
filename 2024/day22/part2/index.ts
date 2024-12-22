@@ -29,7 +29,7 @@ function solve(input: string) {
       const val = getNextSecret(num);
       slidingWindow.push((val % 10) - (num % 10));
       if (slidingWindow.length === 4) {
-        // find maximum
+        // I misunderstood the problem and calculated max before, my bad
         if (!innerMemo.has(slidingWindow.join(","))) {
           innerMemo.set(slidingWindow.join(","), val % 10);
         }
